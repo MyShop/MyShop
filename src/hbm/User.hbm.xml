@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+                                   "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping default-lazy="false">
+ <class name="com.ibs.hibernate.bean.user.User" table="ibs_user" lazy="false">
+  <id name="id"  column="id" type="integer">
+    	<generator class="identity"></generator>
+  </id>
+  <property column="email" name="email" not-null="true"  type="java.lang.String"/>
+  <property column="password" name="password" not-null="true" type="java.lang.String"/>
+  <one-to-one class="com.ibs.hibernate.bean.user.Userinfo" name="userInfo"/>
+ </class>
+</hibernate-mapping>
