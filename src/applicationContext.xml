@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+	<bean id="dataSource"
+		class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url"
+			value="jdbc:mysql://localhost:3306/IBS?characterEncoding=UTF-8" />
+		<property name="username" value="root" />
+		<property name="password" value="admin" />
+	</bean>
+
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean"
+		destroy-method="destroy" >
+		<property name="dataSource" ref="dataSource" />
+		<property name="mappingLocations">
+			<list>
+				<value>WEB-INF/classes/hbm/*.hbm.xml</value>
+			</list>
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">
+					org.hibernate.dialect.MySQLDialect
+				</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.format_sql">true</prop>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<bean id="hibernateTransactionManager"
+		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="hibernateTransactionAttributeSource"
+		class="org.springframework.transaction.interceptor.NameMatchTransactionAttributeSource">
+		<property name="properties">
+			<props>
+				<prop key="*">PROPAGATION_REQUIRED</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<bean id="loginAction" class="com.ibs.action.login.loginAction" scope="prototype">
+		<property name="dao" ref="daoImpl"></property>
+	</bean>
+	
+	<bean id="jobAction" class="com.ibs.action.job.jobAction" scope="prototype">
+	</bean>
+	
+	<bean id="menuAction" class="com.ibs.action.menu.menuAction" scope="prototype">
+	</bean>
+	
+	<bean id="productAction" class="com.ibs.action.product.productAction" scope="prototype">
+		<property name="dao" ref="daoImpl"></property>
+	</bean>
+	
+	<bean id="sonsoleAction" class="com.ibs.action.place.placeAction" scope="prototype">
+		<property name="dao" ref="daoImpl"></property>
+	</bean>
+	
+	<bean id="placeAction" class="com.ibs.action.console.consolAction" scope="prototype">
+	</bean>
+	
+	
+	<bean id="daoImpl" class="com.ibs.hibernate.dao.impl.DaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+</beans>

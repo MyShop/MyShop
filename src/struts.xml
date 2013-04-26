@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
+<struts>
+	<constant name="struts.objectFactory" value="spring"></constant>
+	<constant name="struts.devMode" value="true"></constant>
+	
+	<package name="userLogin" namespace="/" extends="json-default">
+        <action name="login*" class="loginAction" method="{1}">
+        	<result  name="input">login/Login.jsp</result>
+			<result  name="success" >login/Welcome.jsp</result>
+			<result  name="cosole" >loginMgr/Welcome.jsp</result>
+		</action>
+    </package>
+	<package name="function" namespace="/" extends="struts-default">
+        <action name="job*" class="jobAction" method="{1}">
+        	<result  name="input">/job/job.jsp</result>
+			<result  name="find">Welcome.jsp</result>
+			<result  name="view">Welcome.jsp</result>
+		</action>
+    </package>
+	
+	<package name="admin" namespace="/" extends="struts-default">
+        <action name="*place" class="placeAction" method="{1}">
+			<result  name="view">place/place.jsp</result>
+		</action>
+    </package>
+    
+    <package name="Menu" namespace="/" extends="json-default">
+        <action name="*Menu" class="menuAction" method="{1}">
+			<result  name="view"  type="json">
+			</result>
+		</action>
+    </package>
+    
+    <package name="product" namespace="/" extends="struts-default">
+        <action name="*Product" class="productAction" method="{1}">
+			<result  name="view">product/showProduct.jsp</result>
+		</action>
+    </package>
+	
+	<package name="console" namespace="/console" extends="struts-default">
+		<action name="*"  class="sonsoleAction" method="{1}">
+			<result name="console">loginMgr/Welcome.jsp</result>
+		</action>
+	</package>
+</struts>    
