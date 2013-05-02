@@ -64,8 +64,7 @@
 		<property name="dao" ref="daoImpl"></property>
 	</bean>
 	
-	<bean id="sonsoleAction" class="com.ibs.action.place.placeAction" scope="prototype">
-		<property name="dao" ref="daoImpl"></property>
+	<bean id="sonsoleAction" class="com.ibs.action.console.menuMgrAction" scope="prototype">
 	</bean>
 	
 	<bean id="placeAction" class="com.ibs.action.console.consolAction" scope="prototype">
