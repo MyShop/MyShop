@@ -12,19 +12,6 @@
 <base href="<%=basePath%>">
 
 <title>My JSP 'Welcome.jsp' starting page</title>
-
-<meta http-equiv="pragma" content="no-cache">
-<meta http-equiv="cache-control" content="no-cache">
-<meta http-equiv="expires" content="0">
-<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
-<meta http-equiv="description" content="This is my page">
-<!--
-	<link rel="stylesheet" type="text/css" href="styles.css">
-	-->
-<script type="text/javascript" src="<%=path%>/js/jquery-1.9.1.js"></script>
-<script type="text/javascript" src="<%=path%>/js/consoleMenu.js"></script>
-<link rel="stylesheet" type="text/css" href="<%=path%>/css/console.css">
-<link rel="stylesheet" type="text/css" href="<%=path%>/css/style.css"> 
 <script type="text/javascript">
 	$(document).ready(
 			 
@@ -32,7 +19,7 @@
 				rand = Math.random();
 				$.ajax({
 					type : "POST",
-					url : "/IBS/loadMenu.xhtml?jsonid=" + rand,// 提交页面
+					url : "/IBS/loadMenu.xhtml?role=0&jsonid=" + rand,// 提交页面
 					beforeSend : function() { // 设置表单提交前方法
 					},
 					error : function(request) { // 设置表单提交出错
@@ -63,21 +50,21 @@
 						} else {
 							alert("对不起，加载数据失败");
 						}
-						$("#consoleId")[0].innerHTML = innerhtml;
+						$("#consoleId")[0].innerHTML = "<ul id='menu'>"
+					+ innerhtml.substr(4, innerhtml.length - 4);
 					}
 				});
-				
-				$(".menu ul li").menu();
+			initMenu();
 			}
+			
 			);
 			
 			
 </script>
 </head>
 <body>
-	<div id="content">
-		 <div class="menu" id="consoleId">
-     	</div>
+	<div style="width: 20%;margin-top: 200px;">
+		<jsp:include page="../common/ConsoleHeader.jsp"></jsp:include>
 	</div>
 </body>
 </html>

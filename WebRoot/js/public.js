@@ -32,7 +32,7 @@ function loadMenu() {
 	rand = Math.random();
 	$.ajax({
 		type : "POST",
-		url : "/IBS/loadMenu.xhtml?jsonid="+rand,// 提交页面
+		url : "/IBS/loadMenu.xhtml?role=1&jsonid="+rand,// 提交页面
 		beforeSend : function() { // 设置表单提交前方法
 		},
 		error : function(request) { // 设置表单提交出错

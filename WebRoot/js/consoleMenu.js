@@ -1,51 +1,51 @@
-(function($) {
-    $.fn.menu = function(b) {
-        var c,
-        item,
-        httpAdress;
-        b = jQuery.extend({
-            Speed: 220,
-            autostart: 1,
-            autohide: 1
-        },
-        b);
-        c = $(this);
-        item = c.children("ul").parent("li").children("a");
-        httpAdress = window.location;
-        item.addClass("inactive");
-        function _item() {
-            var a = $(this);
-            if (b.autohide) {
-                a.parent().parent().find(".active").parent("li").children("ul").slideUp(b.Speed / 1.2, 
-                function() {
-                    $(this).parent("li").children("a").removeAttr("class");
-                    $(this).parent("li").children("a").attr("class", "inactive")
-                })
-            }
-            if (a.attr("class") == "inactive") {
-                a.parent("li").children("ul").slideDown(b.Speed, 
-                function() {
-                    a.removeAttr("class");
-                    a.addClass("active")
-                })
-            }
-            if (a.attr("class") == "active") {
-                a.removeAttr("class");
-                a.addClass("inactive");
-                a.parent("li").children("ul").slideUp(b.Speed)
-            }
+/* 
+   Simple JQuery Accordion menu.
+   HTML structure to use:
+
+   <ul id="menu">
+     <li><a href="#">Sub menu heading</a>
+     <ul>
+       <li><a href="http://site.com/">Link</a></li>
+       <li><a href="http://site.com/">Link</a></li>
+       <li><a href="http://site.com/">Link</a></li>
+       ...
+       ...
+     </ul>
+     <li><a href="#">Sub menu heading</a>
+     <ul>
+       <li><a href="http://site.com/">Link</a></li>
+       <li><a href="http://site.com/">Link</a></li>
+       <li><a href="http://site.com/">Link</a></li>
+       ...
+       ...
+     </ul>
+     ...
+     ...
+   </ul>
+
+Copyright 2007 by Marco van Hylckama Vlieg
+
+web: http://www.i-marco.nl/weblog/
+email: marco@i-marco.nl
+
+Free for non-commercial use
+*/
+
+function initMenu() {
+  $('#menu ul').hide();
+  $('#menu ul').children('.current').parent().show();
+  //$('#menu ul:first').show();
+  $('#menu li a').click(
+    function() {
+      var checkElement = $(this).next();
+      if((checkElement.is('ul')) && (checkElement.is(':visible'))) {
+        return false;
         }
-        item.unbind('click').click(_item);
-        if (b.autostart) {
-            c.children("a").each(function() {
-                if (this.href == httpAdress) {
-                    $(this).parent("li").parent("ul").slideDown(b.Speed, 
-                    function() {
-                        $(this).parent("li").children(".inactive").removeAttr("class");
-                        $(this).parent("li").children("a").addClass("active")
-                    })
-                }
-            })
+      if((checkElement.is('ul')) && (!checkElement.is(':visible'))) {
+        $('#menu ul:visible').slideUp('normal');
+        checkElement.slideDown('normal');
+        return false;
         }
-    }
-})(jQuery);
+      }
+    );
+  }
