@@ -35,27 +35,28 @@ import com.opensymphony.xwork2.ActionSupport;
 public class menuAction extends ActionSupport{
 	
  
+   private String role;
    private ArrayList<Menu> menuList;
    public String load()
    {
-	   menuList = searchMenu(0);
+	   menuList = searchMenu(0,role);
 	   return "view";
    }
    
    
-   private ArrayList searchMenu(Integer parent)
+   public static ArrayList searchMenu(Integer parent,String role)
    {
 	   Session hibSession = HibernateSessionFactory.getSessionFactory().openSession();
 	   try
 	   {
 		   String sql =" from Menu where parent =:parent and role =:role";
-		   ArrayList<Menu> listMenu = (ArrayList<Menu>) hibSession.createQuery(sql).setParameter("parent", parent).setParameter("role", SystemVariable.Role1.toString()).list();
+		   ArrayList<Menu> listMenu = (ArrayList<Menu>) hibSession.createQuery(sql).setParameter("parent", parent).setParameter("role", role).list();
 		   if(listMenu !=null && listMenu.size() > 0)
 		   {
 			   for(int i = 0; i < listMenu.size();i++)
 			   {
 				   Integer id = listMenu.get(i).getId();
-				   listMenu.get(i).setChild(searchMenu(id));
+				   listMenu.get(i).setChild(searchMenu(id,role));
 			   }
 		   }
 		   
@@ -78,6 +79,16 @@ public ArrayList<Menu> getMenuList() {
 }
 public void setMenuList(ArrayList<Menu> menuList) {
 	this.menuList = menuList;
+}
+
+
+public String getRole() {
+	return role;
+}
+
+
+public void setRole(String role) {
+	this.role = role;
 }
 	
 }

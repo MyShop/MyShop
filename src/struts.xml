@@ -40,7 +40,8 @@
 	
 	<package name="console" namespace="/console" extends="struts-default">
 		<action name="*"  class="sonsoleAction" method="{1}">
-			<result name="console">loginMgr/Welcome.jsp</result>
+			<result name="selectRole">/menuMgr/role.jsp</result>
+			<result name="viewMenu">/menuMgr/viewMenu.jsp</result>
 		</action>
 	</package>
 </struts>    

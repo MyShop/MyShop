@@ -12,9 +12,7 @@
 	Userinfo userinfo = (Userinfo) session.getAttribute("userInfo");
 %>
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
-<head>
+
 <script type="text/javascript" src="<%=path %>/js/jquery-1.9.1.js" ></script>
 <script type="text/javascript" src="<%=path %>/js/public.js"></script>
 <script type="text/javascript" src="<%=path %>/js/site.js"></script>
@@ -30,9 +28,7 @@ $(document).ready(function(){
 	mainmenu();
 });
 </script>
-<title>欢迎您，<%=userinfo.getName()%></title>
-</head>
-<body>
+
 <div id="header" style="margin-top:0px;;height: 200px;">
 	<div id="menu" style="padding-top:179px;margin-left: 20%;height:21px;"></div>
 </div>
