@@ -78,7 +78,7 @@ public class ulTag<T extends Menu>  extends TagSupport {
         			Integer id  = (Integer) getId.invoke(((Menu)list.get(i)), null);
         			String  url = (String) getUrl.invoke(((Menu)list.get(i)),null );
         			Integer  parent = (Integer) getPareng.invoke(((Menu)list.get(i)),null );
-        			bf.append("<li id=\"node_" +id.toString()+ "\"" + "  parent=\"" + parent.toString() +"\"" + " onclick = \"edit(this.id)\""+">").append(name +"</a>"+"</li>");
+        			bf.append("<li id=\"node_" +id.toString()+ "\"" + "  parent=\"" + parent.toString() +"\"" + " onclick = \"getMenu(this.id)\""+">").append(name +"("+id.toString()+")"+"</a>"+"</li>");
         			List tempList = ((Menu)list.get(i)).getChild();
         			if(tempList != null)
         			{
