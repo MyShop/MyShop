@@ -60,8 +60,11 @@
 	<bean id="menuAction" class="com.ibs.action.menu.menuAction" scope="prototype">
 	</bean>
 	
-	<bean id="productAction" class="com.ibs.action.product.productAction" scope="prototype">
+	<bean id="showProductAction" class="com.ibs.action.product.ShowProductAction" scope="prototype">
 		<property name="dao" ref="daoImpl"></property>
+	</bean>
+	
+	<bean id="MangeProductAction" class="com.ibs.action.product.MangeProductAction" scope="prototype">
 	</bean>
 	
 	<bean id="sonsoleAction" class="com.ibs.action.console.menuMgrAction" scope="prototype">
