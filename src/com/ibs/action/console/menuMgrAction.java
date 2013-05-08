@@ -1,5 +1,6 @@
 package com.ibs.action.console;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 import java.util.Map;
@@ -7,6 +8,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.apache.struts2.ServletActionContext;
@@ -33,6 +35,9 @@ public class menuMgrAction<T> extends ActionSupport {
 	
 	//菜单列表
 	private List<Menu> menuList;
+	
+	//提交的菜单
+	 private Menu menu;
 	
 	ActionContext context = ActionContext.getContext();  
     HttpServletRequest request = (HttpServletRequest) context.get(ServletActionContext.HTTP_REQUEST);  
@@ -70,26 +75,21 @@ public class menuMgrAction<T> extends ActionSupport {
 	
 	public String intoMenu()
 	{
-		Session session  = null;
-		Transaction tx = null;
-		try
-		{
-			session = HibernateSessionFactory.getSessionFactory().openSession();
-			tx = session.beginTransaction();
-			tx.begin();
-			menuList = menuAction.searchMenu(0, role);
-			tx.commit();
-		}
-		catch(Exception ex)
-		{
-			tx.rollback();
-		}
-		finally
-		{
-			session.close();
-		}
-		request.setAttribute("menuList", menuList);
+		request.setAttribute("role", role);
 		return "viewMenu";
+	}
+	
+	public String getMenuListByRole() throws IOException
+	{
+		
+		role = request.getParameter("role");
+		menuList = menuAction.searchMenu(0, role);
+		PrintWriter out = response.getWriter();
+		JSONArray  jsonArray = JSONArray.fromObject(menuList);
+		response.setCharacterEncoding("UTF-8");
+		response.setContentType("application/x-json");
+		out.print(jsonArray.toString());
+		return null;
 	}
 	
 	public String getMenuById()
@@ -122,6 +122,88 @@ public class menuMgrAction<T> extends ActionSupport {
 		return null;
 	}
 	
+	public String addMenu()
+	{
+		this.menu = new Menu();
+		this.menu.setName(request.getParameter("name"));
+		this.menu.setParent(Integer.valueOf(request.getParameter("parent")));
+		this.menu.setRole(request.getParameter("role"));
+		this.menu.setUrl(request.getParameter("url"));
+		Session session = null;
+		Transaction tx = null;
+		try
+		{
+			session = HibernateSessionFactory.getSessionFactory().openSession();
+			tx = session.beginTransaction();
+			session.save(this.menu);
+			tx.commit();
+		}
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
+			tx.rollback();
+		}
+		finally
+		{
+			session.close();
+		}
+		return "viewMenu";
+	}
+	public String delMenu()
+	{
+		this.menu = new Menu();
+		this.menu.setId(Integer.valueOf(request.getParameter("id")));
+		Session session = null;
+		Transaction tx = null;
+		try
+		{
+			session = HibernateSessionFactory.getSessionFactory().openSession();
+			tx = session.beginTransaction();
+			session.delete(this.menu);
+			tx.commit();
+		}
+		catch(Exception ex)
+		{
+			tx.rollback();
+			ex.printStackTrace();
+		}
+		finally
+		{
+			session.close();
+		}
+		return "viewMenu";
+	}
+	
+	public String editMenu()
+	{
+		this.menu = new Menu();
+		this.menu.setId(Integer.valueOf(request.getParameter("id")));
+		this.menu.setName(request.getParameter("name"));
+		this.menu.setParent(Integer.valueOf(request.getParameter("parent")));
+		this.menu.setRole(request.getParameter("role"));
+		this.menu.setUrl(request.getParameter("url"));
+		
+		Session session = null;
+		Transaction tx = null;
+		try
+		{
+			session = HibernateSessionFactory.getSessionFactory().openSession();
+			tx = session.beginTransaction();
+			session.update(this.menu);
+			tx.commit();
+		}
+		catch(Exception ex)
+		{
+			tx.rollback();
+			ex.printStackTrace();
+		}
+		finally
+		{
+			session.close();
+		}
+		
+		return "viewMenu";
+	}
 	public List<RoleType> getRoleList() {
 		return roleList;
 	}
@@ -144,5 +226,13 @@ public class menuMgrAction<T> extends ActionSupport {
 
 	public void setMenuList(List<Menu> menuList) {
 		this.menuList = menuList;
+	}
+
+	public Menu getMenu() {
+		return menu;
+	}
+
+	public void setMenu(Menu menu) {
+		this.menu = menu;
 	}
 }
