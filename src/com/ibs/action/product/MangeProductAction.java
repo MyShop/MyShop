@@ -11,6 +11,9 @@ public class MangeProductAction extends ActionSupport{
 	
 	public String intoProdPage()
 	{
+		
+		
+		
 		return "intoSearch";
 	}
 	
