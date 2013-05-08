@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
 <struts>
-	<constant name="struts.objectFactory" value="spring"></constant>
-	<constant name="struts.devMode" value="true"></constant>
+ 	<constant name="struts.objectFactory" value="spring"></constant>
+    <constant name="struts.devMode" value="true"></constant>
 	
 	<package name="userLogin" namespace="/" extends="json-default">
         <action name="login*" class="loginAction" method="{1}">
@@ -25,6 +25,7 @@
 		</action>
     </package>
     
+    <!-- 计划把这个Action删掉，因为项目中如果用太多的Ajax，会降低系统的性能 -->
     <package name="Menu" namespace="/" extends="json-default">
         <action name="*Menu" class="menuAction" method="{1}">
 			<result  name="view"  type="json">
@@ -33,12 +34,18 @@
     </package>
     
     <package name="product" namespace="/" extends="struts-default">
-        <action name="*Product" class="productAction" method="{1}">
+        <action name="*Product" class="showProductAction" method="{1}">
 			<result  name="view">product/showProduct.jsp</result>
 		</action>
     </package>
+    
+    <package name="mangeProduct" namespace="/console" extends="struts-default">
+    	<action name="*Prod*" class="MangeProductAction" method="{1}Prod{2}">
+			<result  name="intoSearch">/product/intoSearch.jsp</result>
+		</action>
+    </package>
 	
-	<package name="console" namespace="/console" extends="struts-default">
+	<package name="menu" namespace="/console" extends="struts-default">
 		<action name="*"  class="sonsoleAction" method="{1}">
 			<result name="selectRole">/menuMgr/role.jsp</result>
 			<result name="viewMenu">/menuMgr/viewMenu.jsp</result>
