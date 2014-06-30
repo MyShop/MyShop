@@ -81,4 +81,10 @@ public class BaseAction{
 			json.append("]");
 			this.printJson(json.toString());
 		}
+	    public static void main(String[] args)
+	    {
+	    	double width = 100;
+	    	double neiWidth =  ((width - 3)+4.6*2)/4 - 7 - 0.4;
+	    	System.out.println(neiWidth);
+	    }
 }
