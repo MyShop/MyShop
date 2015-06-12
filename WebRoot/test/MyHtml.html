@@ -1,0 +1,19 @@
+<!DOCTYPE table PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<script type="text/javascript" src="../js/jquery-1.9.1.js">
+
+</script>
+<table><tbody>
+<tr><td>1111</td><td><input type="text"  id="cd" name="cd" value="你好"/></td><td><input type="button"  value="删除" onclick="del(this)" /></td></tr>
+<tr><td>2222</td><td><input type="text" name="cd"/></td><td><input type="button"  value="删除" onclick="del(this)" /></td></tr>
+<tr><td>3333</td><td><input type="text" name="cd"/></td><td><input type="button"  value="删除" onclick="del(this)" /></td></tr>
+</tbody></table>
+
+<script type="text/javascript">
+function del(obj)
+{
+   var a=$($(obj).parent()).parent();//得到按钮[obj]的父元素[td]的父元素[tr]
+   alert($($(a).children()[1]).children("input[name='cd']")[0].value);
+//alert($("#cd")[0]);
+}
+</script>
