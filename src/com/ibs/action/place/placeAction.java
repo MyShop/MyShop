@@ -26,14 +26,12 @@ import java.util.List;
 import org.hibernate.Session;
 
 import Hibernate.HibernateSessionFactory;
-
 import base.BaseAction;
 
 import com.ibs.hibernate.bean.place.City;
 import com.ibs.hibernate.bean.place.Province;
-import com.opensymphony.xwork2.ActionSupport;
 
-public class placeAction extends ActionSupport{
+public class placeAction extends BaseAction{
 	
 	private Integer provinceId;
 	public Integer getCityId() {

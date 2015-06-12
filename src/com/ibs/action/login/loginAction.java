@@ -21,6 +21,7 @@
 package com.ibs.action.login;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -30,27 +31,24 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts2.ServletActionContext;
+import org.hibernate.Session;
 
+import Hibernate.HibernateSessionFactory;
+import base.BaseAction;
 import base.SystemVariable;
 import base.ibsValidate;
 
 import com.ibs.hibernate.bean.role.RoleType;
+import com.ibs.hibernate.bean.system.Menu;
 import com.ibs.hibernate.bean.user.User;
+import com.ibs.hibernate.bean.user.UserRole;
 import com.ibs.hibernate.bean.user.Userinfo;
 import com.ibs.hibernate.dao.BaseDAO;
 import com.opensymphony.xwork2.ActionContext;
-import com.opensymphony.xwork2.ActionSupport;
 
-public class loginAction<T> extends ActionSupport{
+public class loginAction<T> extends BaseAction{
 
-	public BaseDAO<T> getDao() {
-		return dao;
-	}
-
-	public void setDao(BaseDAO<T> dao) {
-		this.dao = dao;
-	}
-
+	
 	/**
 	 * 
 	 */
@@ -64,15 +62,12 @@ public class loginAction<T> extends ActionSupport{
     private BaseDAO<T> dao;
 	
 	
-	ActionContext context = ActionContext.getContext();  
-    HttpServletRequest request = (HttpServletRequest) context.get(ServletActionContext.HTTP_REQUEST);  
-    HttpServletResponse response = (HttpServletResponse) context.get(ServletActionContext.HTTP_RESPONSE);  
-    Map session = context.getSession();  
 	/**
 	 * 提交表单前验证
 	 * @return
 	 * @throws IOException
 	 */
+    
 	public void  validateEnter() throws IOException
 	{
 		
@@ -94,7 +89,7 @@ public class loginAction<T> extends ActionSupport{
 			}
 			
 			//validate password
-			if(!ibsValidate.isEmpty(password))
+			if(!ibsValidate.isEmpty(password) && userList!=null && userList.size() > 0)
 			{
 				if(ibsValidate.isEmpty(password))
 				{
@@ -116,35 +111,46 @@ public class loginAction<T> extends ActionSupport{
 				this.addFieldError("rePassword", errorMessage.login105);
 			}
 			
-			userInfo = userList.get(0).getUserInfo();//将查询的用户信息保存
-			
-//			Set roles = userInfo.getRoles();
-//			RoleType[] tempRoles =null;
-//			Iterator it =null;
-//			if(roles != null)
-//			{
-//				it =  roles.iterator();
-//			}
-			
-			//根据用户权限判断是否允许标志位
-//			boolean isAllow = false;
-//			
-//			while(it.hasNext())
-//			{
-//				Integer tempRole = ((RoleType)it.next()).getId();
-//				System.out.print(SystemVariable.Role1.equals(tempRole));
-//				if(SystemVariable.Role1.equals(tempRole))
-//				{
-//					isAllow = true;
-//				    break;
-//				}
-//			}
-//			
-//			if(isAllow == false)
-//			{
-//				this.addFieldError("email", errorMessage.login107);
-//			}
-	}
+			//字段校验通过再检验权限问题
+			if(this.getFieldErrors().size() == 0)
+			{
+				userInfo = userList.get(0).getUserInfo();//将查询的用户信息保存
+				//查询用户权限 
+				hql =" from UserRole where userAccount='" + email +"'";
+				List<UserRole> roles = (List<UserRole>) dao.list(hql);
+				RoleType[] tempRoles =null;
+				Iterator it =null;
+				if(roles != null)
+				{
+					it =  roles.iterator();
+				}
+				
+				//根据用户权限判断是否允许标志位
+				boolean isAllow = false;
+				
+				while(it.hasNext())
+				{
+					Integer tempRole = ((UserRole)it.next()).getRoleId();
+					System.out.print(SystemVariable.Role1.equals(tempRole));
+					if(SystemVariable.Role1.equals(tempRole))
+					{
+						isAllow = true;
+					    break ;
+					}
+					else if(SystemVariable.Role0.equals(tempRole))
+					{
+						isAllow = true;
+						break ;
+					}
+				}
+				
+				if(isAllow == false)
+				{
+					this.addFieldError("email", errorMessage.login107);
+				}
+
+			}
+}
 	
 	/**
 	 * 提交表单，提交表单前需再次验证谨防通过修改JS修改表单数据
@@ -155,33 +161,38 @@ public class loginAction<T> extends ActionSupport{
 	{
 			session.put("userInfo",userInfo);
 			userInfo = (Userinfo) session.get("userInfo");
-			Set roles = userInfo.getRoles();
+			String hql =" from UserRole where userAccount='" + email +"'";
+			List roles = dao.list(hql);
 			RoleType[] tempRoles =null;
 			Iterator it =null;
 			if(roles != null)
 			{
 				it =  roles.iterator();
 			}
-			//根据用户权限判断是否允许标志位
-			boolean isAllow = false;
+			
 			
 			while(it.hasNext())
 			{
-				Integer tempRole = ((RoleType)it.next()).getId();
-				System.out.print(SystemVariable.Role1.equals(tempRole));
+				Integer tempRole = ((UserRole)it.next()).getRoleId();
 				if(SystemVariable.Role1.equals(tempRole))
 				{
-					isAllow = true;
-				    break;
+					return "success";
+				}
+				else if(SystemVariable.Role0.equals(tempRole))
+				{
+					return "cosole";
 				}
 			}
-			if(isAllow)
-			 return "success";
-			else
-				return "cosole";
+			
+			return "success";
 		
 	}
     
+	public String index() throws Exception
+	{
+		return this.Enter();
+	}
+	
 	public String execute()
 	{
 		return "input";
@@ -218,4 +229,14 @@ public class loginAction<T> extends ActionSupport{
 	public void setUserInfo(Userinfo userInfo) {
 		this.userInfo = userInfo;
 	}
+	
+
+    public BaseDAO<T> getDao() {
+		return dao;
+	}
+
+	public void setDao(BaseDAO<T> dao) {
+		this.dao = dao;
+	}
+
 }

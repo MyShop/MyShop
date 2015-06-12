@@ -1,13 +1,20 @@
 package com.ibs.hibernate.bean.user;
 
+import java.util.Set;
+
 
 public class User {
 
 	private Integer id;
+	
 	private String email;
+	
 	private String password;
+	
 	private Userinfo userInfo;
-
+	
+	private Set<UserRole> roles;
+	
 	public Userinfo getUserInfo() {
 		return userInfo;
 	}
@@ -38,5 +45,13 @@ public class User {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public Set<UserRole> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(Set<UserRole> roles) {
+		this.roles = roles;
 	}
 }

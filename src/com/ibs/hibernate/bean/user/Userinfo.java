@@ -9,12 +9,14 @@ public class Userinfo{
 	private static final long serialVersionUID = 1L;
 	
 	private Integer id;
+	private String email;
 	private String name;
 	private Integer province;
 	private Integer shi;
 	private Integer xian;
 	private Integer zhen;
-	private Set<RoleType> roles;
+	private String phone;
+	
 	public String getName() {
 		return name;
 	}
@@ -51,10 +53,18 @@ public class Userinfo{
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	public Set<RoleType> getRoles() {
-		return roles;
+	public String getEmail() {
+		return email;
 	}
-	public void setRoles(Set<RoleType> roles) {
-		this.roles = roles;
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public String getPhone() {
+		return phone;
+	}
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 }
+
+

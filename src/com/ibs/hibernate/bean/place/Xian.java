@@ -1,22 +1,15 @@
 package com.ibs.hibernate.bean.place;
 
-import java.io.Serializable;
 
+public class Xian{
 
-public class City implements Serializable{
-
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -326334822516840406L;
 
 	/**
 	 * 
 	 */
 	private Integer  id;
 	
-	private Integer province;
+	private Integer city;
 	
 	private String name;
 	public Integer getId() {
@@ -33,10 +26,10 @@ public class City implements Serializable{
 	public void setName(String name) {
 		this.name = name;
 	}
-	public Integer getProvince() {
-		return province;
+	public Integer getCity() {
+		return city;
 	}
-	public void setProvince(Integer province) {
-		this.province = province;
+	public void setCity(Integer city) {
+		this.city = city;
 	}
 }

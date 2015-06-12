@@ -22,19 +22,16 @@ package com.ibs.action.place;
 
 import java.util.List;
 
-
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import Hibernate.HibernateSessionFactory;
-
 import base.BaseAction;
 
 import com.ibs.hibernate.bean.place.City;
 import com.ibs.hibernate.bean.place.Province;
-import com.opensymphony.xwork2.ActionSupport;
 
-public class cityAction  extends ActionSupport
+public class cityAction  extends BaseAction
 {
 	private Province pro;
 	public Province getPro() {

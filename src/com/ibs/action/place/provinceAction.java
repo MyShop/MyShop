@@ -29,9 +29,8 @@ import Hibernate.HibernateSessionFactory;
 import base.BaseAction;
 
 import com.ibs.hibernate.bean.place.Province;
-import com.opensymphony.xwork2.ActionSupport;
 
-public class provinceAction extends ActionSupport
+public class provinceAction extends BaseAction
 {
 	private Province pro;
 	public Province getPro() {

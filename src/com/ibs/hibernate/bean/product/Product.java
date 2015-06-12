@@ -1,7 +1,14 @@
 package com.ibs.hibernate.bean.product;
 
+import java.io.Serializable;
 
-public class Product{
+
+public class Product implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2850797091371732481L;
 
 	private Integer id;
 	
@@ -14,6 +21,28 @@ public class Product{
 	private String picture;
 	
 	private String miaoshu;
+	
+	//第一分类类别属性
+	private Integer type1;
+	
+	//第一分类类别属性
+	private Integer type2;
+	
+	//第一分类类别属性
+	private Integer type3;
+	
+	//产品缩略图
+	private String firstPicture;
+	
+	public String getFirstPicture() {
+		return firstPicture;
+	}
+
+	public void setFirstPicture(String firstPicture) {
+		this.firstPicture = firstPicture;
+	}
+
+	
 
 	public Integer getId() {
 		return id;
@@ -62,5 +91,29 @@ public class Product{
 
 	public void setPrice(Double price) {
 		this.price = price;
+	}
+
+	public Integer getType1() {
+		return type1;
+	}
+
+	public void setType1(Integer type1) {
+		this.type1 = type1;
+	}
+
+	public Integer getType2() {
+		return type2;
+	}
+
+	public void setType2(Integer type2) {
+		this.type2 = type2;
+	}
+
+	public Integer getType3() {
+		return type3;
+	}
+
+	public void setType3(Integer type3) {
+		this.type3 = type3;
 	}
 }
