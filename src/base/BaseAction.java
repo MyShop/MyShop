@@ -7,58 +7,55 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
-import org.apache.struts2.ServletActionContext;
+import org.apache.struts2.interceptor.ServletRequestAware;
+import org.apache.struts2.interceptor.ServletResponseAware;
+import org.apache.struts2.interceptor.SessionAware;
 
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 
-public class BaseAction{
+public class BaseAction extends ActionSupport implements
+ServletRequestAware, ServletResponseAware, SessionAware {
 	
-	    public HttpServletRequest request;
+	    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 2648183755483368254L;
+		public HttpServletRequest request;
 	    public HttpServletResponse response;
-	    public HttpSession session;
-	    public loadProperties  loadPro= loadProperties.getInstance();
-	    public HttpSession getSession() {
-			return session;
-		}
-		public void setSession(HttpSession session) {
+	    public Map session;
+	    private ActionContext action;
+	    @Override
+		public void setSession(Map<String, Object> session) {
 			this.session = session;
+		}
+
+		@Override
+		public void setServletResponse(HttpServletResponse response) {
+			this.response = response;
+		}
+
+		@Override
+		public void setServletRequest(HttpServletRequest request) {
+			this.request = request;
 		}
 		public HashMap<Object,Object> rejectMap = new HashMap();
 		
-	    
-	    public HttpServletRequest getRequest() {
-			return request;
-		}
-		public void setRequest(HttpServletRequest request) {
-			this.request = request;
-		}
-		public HttpServletResponse getResponse() {
-			return response;
-		}
-		public void setResponse(HttpServletResponse response) {
-			this.response = response;
-		}
-		public ActionContext getContext() {
-			return context;
-		}
-		public void setContext(ActionContext context) {
-			this.context = context;
-		}
-		private ActionContext context;
-	    {
-	    	context = ActionContext.getContext();  
-	    	request = (HttpServletRequest) context.get(ServletActionContext.HTTP_REQUEST);  
-	    	response = (HttpServletResponse) context.get(ServletActionContext.HTTP_RESPONSE);  
-	    	session = request.getSession();  
-	    }
 	    protected void printJson(String json) throws IOException{
-			this.getResponse().setCharacterEncoding("UTF-8");
-			this.getResponse().setContentType("application/x-json");
-			this.getResponse().getWriter().print(json);
+			this.response.setCharacterEncoding("UTF-8");
+			this.response.setContentType("application/x-json");
+			this.response.getWriter().print(json);
+			this.response.getWriter().flush();
 		}
+	    
+	    protected void printHtml(String html) throws IOException
+	    {
+	    	this.response.setCharacterEncoding("UTF-8");
+	    	this.response.setContentType("text/html; charset=utf-8");
+	    	this.response.getWriter().print(html);
+	    	this.response.getWriter().flush();
+	    }
 	    
 	    protected void returnRejMap() throws IOException{
 	    	Iterator iterator = rejectMap.entrySet().iterator();
@@ -81,10 +78,4 @@ public class BaseAction{
 			json.append("]");
 			this.printJson(json.toString());
 		}
-	    public static void main(String[] args)
-	    {
-	    	double width = 100;
-	    	double neiWidth =  ((width - 3)+4.6*2)/4 - 7 - 0.4;
-	    	System.out.println(neiWidth);
-	    }
 }

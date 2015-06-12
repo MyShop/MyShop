@@ -8,6 +8,7 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
 
 public class CharacterEncodingFilter implements Filter {
 
@@ -26,11 +27,11 @@ public class CharacterEncodingFilter implements Filter {
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response,
 			FilterChain chain) throws IOException, ServletException {
-		if (enabled || characterEncoding != null) {
-			request.setCharacterEncoding(characterEncoding);
-			response.setCharacterEncoding(characterEncoding);
-		}
-
+			if (enabled || characterEncoding != null) 
+			{
+				request.setCharacterEncoding(characterEncoding);
+				response.setCharacterEncoding(characterEncoding);
+			}
 		chain.doFilter(request, response);
 	}
 
