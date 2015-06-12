@@ -1,12 +1,8 @@
 package Hibernate;
 
-import java.util.List;
-
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.cfg.Configuration;
-
-import com.ibs.hibernate.bean.user.User;
 
 /**
  * Configures and provides access to Hibernate sessions, tied to the
