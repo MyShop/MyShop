@@ -3,14 +3,53 @@
 <struts>
  	<constant name="struts.objectFactory" value="spring"></constant>
     <constant name="struts.devMode" value="true"></constant>
+    <!-- 上传文件 -->
+    <package name="upload" extends="json-default">
+    	<action name="fileUploadAction" class="com.ibs.action.file.FileAction" method="fileUpload">
+    		<result name="success" type="json" >
+    			<param name="contenType">text/html</param>
+    		</result>
+    	</action>
+    </package>
 	
+	<!-- 下载文件 -->
+	<package name="download"  extends="struts-default">
+		<action name="downloadFile"  class="com.ibs.action.file.FileAction" method="downloadFile">
+			<result type="stream">
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">inputStream</param>
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="bufferSize">4096</param>
+			</result>
+		</action>		
+	</package>
 	<package name="userLogin" namespace="/" extends="json-default">
         <action name="login*" class="loginAction" method="{1}">
         	<result  name="input">login/Login.jsp</result>
 			<result  name="success" >login/Welcome.jsp</result>
 			<result  name="cosole" >loginMgr/Welcome.jsp</result>
 		</action>
+		<action name="register*"  class="registerAction" method="{1}">
+			<result  name="input">reg/input.jsp</result>
+			<result  name="result">reg/result.jsp</result>
+		</action>
     </package>
+    
+<!--     <package name="consoleLogin" namespace="/consoleLogin" extends="struts-default"> -->
+<!--     	<action name="login*" class="consoleLoginAction" method="{1}"> -->
+<!--     		<result name="input">/loginMgr/Login.jsp</result> -->
+<!--     		<result name="success">/loginMgr/Welcome.jsp</result> -->
+<!--     	</action> -->
+<!--     </package> -->
+    
+    <package name="Merchants" namespace="/Merch" extends="struts-default">
+    	<action name="Merch_*" class="merchantsAction" method="{1}">
+    		<result name="input">/Merchant/input.jsp</result>
+    		<result name="intoNotice">/Merchant/notice.jsp</result>
+    		<result name="intoVote">/Merchant/vote.jsp</result>
+    	</action>
+    </package>
+    
 	<package name="function" namespace="/" extends="struts-default">
         <action name="job*" class="jobAction" method="{1}">
         	<result  name="input">/job/job.jsp</result>
@@ -24,31 +63,60 @@
 			<result  name="view">place/place.jsp</result>
 		</action>
     </package>
-    
-    <!-- 计划把这个Action删掉，因为项目中如果用太多的Ajax，会降低系统的性能 -->
-    <package name="Menu" namespace="/" extends="json-default">
-        <action name="*Menu" class="menuAction" method="{1}">
-			<result  name="view"  type="json">
-			</result>
-		</action>
-    </package>
-    
-    <package name="product" namespace="/" extends="struts-default">
-        <action name="*Product" class="showProductAction" method="{1}">
-			<result  name="view">product/showProduct.jsp</result>
-		</action>
-    </package>
-    
-    <package name="mangeProduct" namespace="/console" extends="struts-default">
-    	<action name="*Prod*" class="MangeProductAction" method="{1}Prod{2}">
-			<result  name="intoSearch">/product/intoSearch.jsp</result>
-		</action>
-    </package>
 	
-	<package name="menu" namespace="/console" extends="struts-default">
-		<action name="*"  class="sonsoleAction" method="{1}">
+	<!-- 设置订单查询Action -->
+	<package name="order" namespace="/" extends="struts-default">
+		<action name="userOrder*" class="userOrderAction" method="{1}">
+			<result name="orderList">/order/orderList.jsp</result>
+			<result name="orderRepair">/order/orderRepair.jsp</result>
+		</action>
+	</package>
+	    
+    <!-- 计划把这个Action删掉，因为项目中如果用太多的Ajax，会降低系统的性能 -->
+    <package name="Menu" namespace="/Menu" extends="json-default">
+        <action name="*Menu" class="menuAction" method="{1}Menu">
+			<result  name="view"  type="json"/>
+		</action>
+    </package>
+    
+    <package name="product" namespace="/Product" extends="struts-default">
+        <action name="*Product" class="showProductAction" method="{1}">
+			<result  name="view">/product/showProduct.jsp</result>
+			<result name="Info">/product/productInfo.jsp</result>
+		</action>
+		<action name="*Prod*" class="productTypeAction" method="{1}Prod{2}">
+    		<result name="list">/product/showProduct.jsp</result>
+    	</action>
+    </package>
+    
+    <package name="buyProd"  namespace="/buy" extends="struts-default">
+    	<action name="*Cart"  class="buyProductAction" method="{1}Cart">
+    		<result name="toCart">/buy/cart.jsp</result>
+    		<result name="toAccount">/buy/toAccount.jsp</result>
+    		<result name="toConfirm">/buy/toConfirm.jsp</result>
+    		<result name="toResult">/buy/toResult.jsp</result>
+    	</action>
+    </package>
+    <package name="menuConsole" namespace="/menuMgr" extends="struts-default">
+		<action name="*"  class="menuMgrAction" method="{1}">
 			<result name="selectRole">/menuMgr/role.jsp</result>
 			<result name="viewMenu">/menuMgr/viewMenu.jsp</result>
 		</action>
 	</package>
+	
+    <package name="mangeProduct" namespace="/prodMgr" extends="struts-default">
+    	<action name="*Prod*" class="mangeProductAction" method="{1}Prod{2}">
+			<result  name="intoSearch">/product/intoSearch.jsp</result>
+			<result  name="view">/product/editProd.jsp</result>
+		</action>
+    </package>
+	
+	
+	<package name="user" namespace="/" extends="json-default">
+		<action name="userInfo*" class="userInfoAction" method="{1}">
+			<result name="input">/user/input.jsp</result>
+			<result name="result">/user/input.jsp</result>
+		</action>
+	</package>
+	
 </struts>    
