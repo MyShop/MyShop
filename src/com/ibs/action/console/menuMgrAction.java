@@ -1,6 +1,5 @@
 package com.ibs.action.console;
 
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 import java.util.Map;
@@ -16,14 +15,16 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import Hibernate.HibernateSessionFactory;
+import base.BaseAction;
+import base.ibsMessages;
+import base.ibsValidate;
 
 import com.ibs.action.menu.menuAction;
 import com.ibs.hibernate.bean.role.RoleType;
 import com.ibs.hibernate.bean.system.Menu;
 import com.opensymphony.xwork2.ActionContext;
-import com.opensymphony.xwork2.ActionSupport;
 
-public class menuMgrAction<T> extends ActionSupport {
+public class menuMgrAction<T> extends BaseAction {
 
 	private static final long serialVersionUID = -7984097648694196439L;
 	
@@ -44,7 +45,7 @@ public class menuMgrAction<T> extends ActionSupport {
     HttpServletResponse response = (HttpServletResponse) context.get(ServletActionContext.HTTP_RESPONSE);  
     Map session = context.getSession();  
 	
-	public String intoRole()
+	public String IntoRole()
 	{
 		Session session  = null;
 		Transaction tx = null;
@@ -73,13 +74,13 @@ public class menuMgrAction<T> extends ActionSupport {
 		return null;
 	}
 	
-	public String intoMenu()
+	public String IntoMenu()
 	{
 		request.setAttribute("role", role);
 		return "viewMenu";
 	}
 	
-	public String getMenuListByRole() throws IOException
+	public String getMenuListByRole() throws Exception
 	{
 		
 		role = request.getParameter("role");
@@ -102,12 +103,13 @@ public class menuMgrAction<T> extends ActionSupport {
 		{
 			session = HibernateSessionFactory.getSessionFactory().openSession();
 			tx = session.beginTransaction();
-			menu = (Menu) session.createQuery(" from Menu where id=:id").setParameter("id", new Integer(menuId)).uniqueResult();
+			menu = (Menu) session.createQuery(" from Menu where id="+new Integer(menuId)).uniqueResult();
 			PrintWriter out = response.getWriter();
 			JSONObject jsonObject = JSONObject.fromObject(menu);
 			response.setCharacterEncoding("UTF-8");
 			response.setContentType("application/x-json");
 			out.print(jsonObject.toString());
+			out.flush();
 			tx.commit();
 		}
 		catch(Exception ex)
