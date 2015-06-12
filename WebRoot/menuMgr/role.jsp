@@ -28,16 +28,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   	 <jsp:include page="../common/ConsoleHeader.jsp"></jsp:include>
   </div>
   <div style="float:left;width:80%;margin-top: 200px;">
-  <form action="<%=basePath%>console/intoMenu.xhtml" method="post">
+  <form action="<%=basePath%>menuMgr/IntoMenu.xhtml" method="post">
   	<s:label>角色名</s:label>
-  	<select name="role">
-  		<option>请选择角色</option>
+  	<select name="role" list="">
+  		<option value="">请选择角色</option>
   		<s:iterator value="#request.roleList" var="RoleType">
   			<option  value="<s:property value="#RoleType.id"/>"><s:property value="#RoleType.name"/></option>
   		</s:iterator>
   	</select>
   	<input type="submit" value="提交">
   </form>
+  <a ondblclick="" style="display: block;"></a>
   </div>
   </body>
 </html>

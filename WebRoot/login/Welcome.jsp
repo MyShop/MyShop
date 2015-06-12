@@ -9,9 +9,14 @@
 			+ path + "/";
 %>
 <html>
-	<head></head>
+	<head>
+		<title>找如意装修，就到买如意</title>
+	</head>
 	<body>
 	<jsp:include page="../common/header.jsp"></jsp:include>
+	<div id="zhaoshang" style="position: absolute;left: 290px;top: 80px;">
+		<a href="<%=path%>/Merch/Merch_Inform.xhtml"><img src="/upload/page/zhaoshang.jpg"></a>
+	</div>
 	<jsp:include page="../common/footer.jsp"></jsp:include>
 </body>
 </html>

@@ -17,14 +17,14 @@
 <script type="text/javascript">
   $(document).ready(
   		rand = Math.random(),
-  		$.getJSON("/IBS/console/getMenuListByRole.xhtml?role="+<%=role%>+"&jsonid="+rand,function(data)
+  		$.getJSON("/IBS/menuMgr/getMenuListByRole.xhtml?role="+<%=role%>+"&jsonid="+rand,function(data)
   			{
 						if (data.length > 0) {
 							function analysis(temp) {
 								var tempHtml = "<ul>";
 								for ( var i = 0; i < temp.length; i++) {
 									tempHtml = tempHtml
-											+ "<li id='node_" + temp[i].id +"'>"+"<a  " + "onclick = \"getMenu(" + temp[i].id +")\">"
+											+ "<li id='node_" + temp[i].id +"'>"+"<a  " + " style='display: block;' ondblclick = \"getMenu(" + temp[i].id +")\">"
 											+ temp[i].name +"(" + temp[i].id +")" +"</a>";
 									if (temp[i].child != null
 											&& temp[i].child.length > 0) {
@@ -49,7 +49,7 @@
   function getMenu(id)
   {
   	rand = Math.random();
-  	$.getJSON("/IBS/console/getMenuById.xhtml?id="+id +"&jsonid="+rand,function(data)
+  	$.getJSON("/IBS/menuMgr/getMenuById.xhtml?id="+id +"&jsonid="+rand,function(data)
   	{
   		$("input[name='id']").val(data.id);
   		$("input[name='name']").val(data.name);
@@ -63,18 +63,18 @@
   
   function add()
   {
-  	$("form[name='menu']").attr("action","/IBS/console/addMenu.xhtml");
+  	$("form[name='menu']").attr("action","/IBS/menuMgr/addMenu.xhtml");
   	$("form[name='menu']").submit();
   }
   function del()
   {
-  	$("form[name='menu']").attr("action","/IBS/console/delMenu.xhtml?id="+$("input[name='id']").val());
+  	$("form[name='menu']").attr("action","/IBS/menuMgr/delMenu.xhtml?id="+$("input[name='id']").val());
   	$("form[name='menu']").submit();
   }
   
   function edit()
   {
-  	  $("form[name='menu']").attr("action","/IBS/console/editMenu.xhtml?id="+$("input[name='id']").val());
+  	  $("form[name='menu']").attr("action","/IBS/menuMgr/editMenu.xhtml?id="+$("input[name='id']").val());
   	  $("form[name='menu']").submit();
   }
   

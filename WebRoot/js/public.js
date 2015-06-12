@@ -32,7 +32,7 @@ function loadMenu() {
 	rand = Math.random();
 	$.ajax({
 		type : "POST",
-		url : "/IBS/loadMenu.xhtml?role=1&jsonid="+rand,// 提交页面
+		url : "/IBS/Menu/loadMenu.xhtml?role=1&jsonid="+rand,// 提交页面
 		beforeSend : function() { // 设置表单提交前方法
 		},
 		error : function(request) { // 设置表单提交出错
@@ -64,4 +64,23 @@ function loadMenu() {
 					+ innerhtml.substr(4, innerhtml.length - 4);
 		}
 	});
+}
+
+function loadProdType() {
+	var returnHtml;
+	rand = Math.random();
+	$.ajax({
+		type : "POST",
+		url : "/IBS/Menu/ProdTypeToMenu.xhtml?role=1&jsonid="+rand,// 提交页面
+		async:false,
+		beforeSend : function() { // 设置表单提交前方法
+		},
+		error : function(request) { // 设置表单提交出错
+		},
+		success : function(data) // 设置表单提交成功后的方法
+		{
+			returnHtml = data;
+		}
+	});
+	return returnHtml;
 }

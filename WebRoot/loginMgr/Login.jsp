@@ -54,7 +54,7 @@
 </head>
 <body>
 	<div class="leftMenu">
-		<s:form action="loginEnter.xhtml" id="login" method="post">
+		<s:form action="/consoleLogin/loginEnter.xhtml" id="login" method="post">
 			<table>
 			<tr>
 				<td><s:textfield  name="email" id="email" label="账号" ></s:textfield></td>
