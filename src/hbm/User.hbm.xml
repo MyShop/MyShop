@@ -8,6 +8,7 @@
   </id>
   <property column="email" name="email" not-null="true"  type="java.lang.String"/>
   <property column="password" name="password" not-null="true" type="java.lang.String"/>
-  <one-to-one class="com.ibs.hibernate.bean.user.Userinfo" name="userInfo"/>
+  <one-to-one class="com.ibs.hibernate.bean.user.Userinfo" name="userInfo"  cascade="save-update"/>
+  
  </class>
 </hibernate-mapping>

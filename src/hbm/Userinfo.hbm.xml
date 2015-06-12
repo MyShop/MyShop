@@ -9,9 +9,11 @@
         <id name="id"  column="id" type="integer">
     			<generator class="identity"></generator>
     	</id>
+    	<property name="email" column="email" type="java.lang.String"></property>
         <property name="name" type="java.lang.String">
             <column name="name" length="40" />
         </property>
+        <property name="phone" column="phone" type="java.lang.String"></property>
         <property name="province" type="java.lang.Integer">
             <column name="province" />
         </property>
@@ -24,9 +26,5 @@
         <property name="zhen" type="java.lang.Integer">
             <column name="zhen" />
         </property>
-        <set name="roles"  table="user_role" lazy="false">
-        	<key column="userId"/>
-        	<many-to-many column="roleId" class="com.ibs.hibernate.bean.role.RoleType"/>
-        </set>
     </class>
 </hibernate-mapping>

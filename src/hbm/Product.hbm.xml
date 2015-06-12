@@ -14,5 +14,8 @@
           	<property name="type" column="type" type="integer"></property>
           	<property name="picture" column="picture" type="string"></property>
           	<property name="miaoshu" column="miaoshu" type="string"></property>
+          	<property name="type1" column="type1" type="integer"></property>
+          	<property name="type2" column="type2" type="integer"></property>
+          	<property name="type3" column="type3" type="integer"></property>
     </class>
 </hibernate-mapping>
