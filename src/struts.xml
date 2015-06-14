@@ -45,7 +45,6 @@
     <package name="Merchants" namespace="/Merch" extends="struts-default">
     	<action name="Merch_*" class="merchantsAction" method="{1}">
     		<result name="input">/Merchant/input.jsp</result>
-    		<result name="intoNotice">/Merchant/notice.jsp</result>
     		<result name="intoVote">/Merchant/vote.jsp</result>
     	</action>
     </package>
