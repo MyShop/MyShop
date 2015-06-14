@@ -33,7 +33,7 @@ import base.BaseAction;
 import com.ibs.hibernate.bean.product.ProductType;
 import com.ibs.hibernate.bean.system.Menu;
 
-public class menuAction extends BaseAction{
+public class menuAction extends BaseAction {
 	
  
    private String role;
