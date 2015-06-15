@@ -68,6 +68,7 @@ public class menuAction extends BaseAction {
    
    public String ProdTypeToMenu() throws IOException
    {
+	   
 	   //如果session中已存在菜单数据
 	   if(session.get("ProdTypeList") != null)
 	   {
@@ -86,7 +87,7 @@ public class menuAction extends BaseAction {
 	   return null;
    }
    
-   public static String getHtml(List<ProductType> typeList)
+   public  String getHtml(List<ProductType> typeList)
    {
 	   StringBuffer returnHtml = new StringBuffer();
 	   for(int i = 0;i < typeList.size(); i++)
@@ -132,7 +133,7 @@ public class menuAction extends BaseAction {
 	   }
 	   return returnHtml.toString();
    }
-   public static ArrayList searchProdType(Integer parentid)
+   public  ArrayList searchProdType(Integer parentid)
    {
 	   Session  hibSession = HibernateSessionFactory.getSession();
 	   try
@@ -163,7 +164,7 @@ public class menuAction extends BaseAction {
 	   return null;
    }
    
-   public static ArrayList searchMenu(Integer parent,String role)
+   public  ArrayList searchMenu(Integer parent,String role)
    {
 	   Session hibSession = HibernateSessionFactory.getSession();
 	   
