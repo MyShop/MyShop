@@ -17,6 +17,27 @@ public class Userinfo{
 	private Integer zhen;
 	private String phone;
 	
+	//统计在线功能额外属性
+	private String IPLogin;
+	
+	public Userinfo()
+	{
+	}
+	
+	public Userinfo(String id,String userName,String IPLogin )
+	{
+		if(id.contains("."))
+		{
+			this.IPLogin = id;
+		}
+		else
+		{
+			this.id = Integer.parseInt(id);
+		}
+		
+		this.name = userName;
+		this.IPLogin = IPLogin;
+	}
 	public String getName() {
 		return name;
 	}
@@ -64,6 +85,12 @@ public class Userinfo{
 	}
 	public void setPhone(String phone) {
 		this.phone = phone;
+	}
+	public String getIPLogin() {
+		return IPLogin;
+	}
+	public void setIPLogin(String iPLogin) {
+		IPLogin = iPLogin;
 	}
 }
 

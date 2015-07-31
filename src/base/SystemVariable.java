@@ -3,6 +3,12 @@ package base;
 import java.util.HashMap;
 
 public class SystemVariable {
+	
+	//禁止该类实例化
+	private SystemVariable()
+	{
+		
+	}
 	/**
 	 * 超级用户
 	 */
@@ -26,6 +32,8 @@ public class SystemVariable {
 	 *  4	仅注册企业客户，支持所有的企业基本服务。
 	 */
 	public static Integer  Role4=4;
+	
+	
 	
 	
 	public static HashMap<Integer,String>  payType;

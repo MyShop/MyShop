@@ -28,4 +28,5 @@ public interface BaseDAO<T>{
 
 
 	public T find(Class<T> clazz, int parseInt);
+	
 }

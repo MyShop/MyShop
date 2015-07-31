@@ -92,7 +92,7 @@ public class consoleLoginAction<T> extends BaseAction {
 			{
 				this.addFieldError("rePassword", errorMessage.login104);
 			}
-			else if(!rePassword.equals(session.get("rePassword")))
+			else if(!rePassword.equals(session.getAttribute("rePassword")))
 			{
 				this.addFieldError("rePassword", errorMessage.login105);
 			}
@@ -140,8 +140,8 @@ public class consoleLoginAction<T> extends BaseAction {
 	 */
 	public String Enter() throws Exception
 	{
-			session.put("userInfo",userInfo);
-			userInfo = (Userinfo) session.get("userInfo");
+			session.putValue("userInfo",userInfo);
+			userInfo = (Userinfo) session.getAttribute("userInfo");
 			String hql =" from UserRole where userAccount='" + email +"'";
 			List roles = dao.list(hql);
 			RoleType[] tempRoles =null;

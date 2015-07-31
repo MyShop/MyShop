@@ -7,9 +7,19 @@
 <hibernate-configuration>
 
 	<session-factory>
-		<property name="dialect">
-			org.hibernate.dialect.MySQLDialect
-		</property>
+	<property name="hibernate.connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
+        <property name="hibernate.c3p0.max_size">20</property>
+        <property name="hibernate.c3p0.min_size">5</property>
+        <property name="hibernate.c3p0.timeout">120</property>
+        <property name="automaticTestTable">Test</property>
+        <property name="hibernate.c3p0.max_statements">100</property>
+        <property name="hibernate.c3p0.idle_test_period">120</property>
+        <property name="hibernate.c3p0.acquire_increment">1</property>
+        <property name="c3p0.testConnectionOnCheckout">true</property>
+        <property name="c3p0.idleConnectionTestPeriod">18000</property>
+        <property name="c3p0.maxIdleTime">25000</property>
+        <property name="c3p0.idle_test_period">120</property>
+        <property name="dialect">org.hibernate.dialect.MySQLDialect</property>
 		<property name="connection.url">
 			jdbc:mysql://localhost:3306/IBS?useUnicode=true&amp;characterEncoding=UTF-8
 		</property>
@@ -43,6 +53,7 @@
 		<mapping resource="hbm/Zhen.hbm.xml"/>
 		<mapping resource="hbm/Merchant.hbm.xml"/>
 		<mapping resource="hbm/IpVote.hbm.xml"/>
-		
+		<mapping resource="hbm/IpLogin.hbm.xml"/>
+		<mapping resource="hbm/Visitor.hbm.xml"/>
 	</session-factory>
 </hibernate-configuration>

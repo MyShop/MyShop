@@ -10,21 +10,24 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import com.ibs.hibernate.dao.BaseDAO;
 
 public class DaoImpl<T> extends HibernateDaoSupport implements BaseDAO<T> {
-	
-	private Session session;
 
 	@SuppressWarnings("unchecked")
 	public T find(Class<T> clazz, int id) {
 		return (T) getHibernateTemplate().get(clazz, id);
 	}
+	
 
 	public void create(T baseBean) {
 		getHibernateTemplate().persist(baseBean);
 	}
 
 	public Query createQuery(String hql) throws HibernateException {
-	   this.session = super.getSession();
-	   Query query = this.session.createQuery(hql);
+	   Session session = super.getSession();
+	  
+	   Query query = session.createQuery(hql);
+	   
+	   super.releaseSession(session);
+	   
 	   return query;
 	   
 	}
@@ -43,7 +46,6 @@ public class DaoImpl<T> extends HibernateDaoSupport implements BaseDAO<T> {
 		for (int i = 0; params != null && i < params.length; i++)
 			query.setParameter(i + 1, params[i]);
 		Object obj = createQuery(hql).uniqueResult();
-		super.releaseSession(this.session);
 		return ((Long) obj).intValue();
 	}
 
@@ -56,7 +58,6 @@ public class DaoImpl<T> extends HibernateDaoSupport implements BaseDAO<T> {
 			query.setParameter(i + 1, params[i]);
 		List<T> list = createQuery(hql).setFirstResult(firstResult)
 				.setMaxResults(maxResults).list();
-		super.releaseSession(this.session);
 		return list;
 	}
 

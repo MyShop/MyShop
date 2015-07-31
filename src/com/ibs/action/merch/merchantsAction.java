@@ -225,34 +225,15 @@ public class merchantsAction<T> extends BaseAction{
 		merch.setDate(df.format(new Date()));
 		dao.save((T) merch);
 		
-		return "intoNotice";
+		
+		//页面预处理
+		this.conrolPageData();
+		return "intoVote";
 	}
 	
 	public String toVote()
 	{
-		//进入投票页面，对商家列表进行查询分页等预处理
-		String PageURL = ServletActionContext.getRequest().getRequestURL().toString();//取得上一页或下一页链接的访问地址
-		String hql = " from Merchant order by votes desc";
-				
-		if(rowCount == 0)
-		{
-			rowCount = dao.list(hql).size();
-					
-			if(rowCount % pageSize > 0)
-			{
-				pageCount = rowCount/pageSize +1;
-			}
-			else
-			{
-				pageCount = rowCount/pageSize;
-			}
-
-		}
-				
-		List<Merchant> merchsList = (List<Merchant>)dao.list(hql,(pageNow-1)*pageSize,pageSize);
-		request.setAttribute("merchsList", merchsList);
-		request.setAttribute("PageURL", PageURL);
-
+		this.conrolPageData();
 		return "intoVote";
 	}
 	
@@ -331,23 +312,23 @@ public class merchantsAction<T> extends BaseAction{
 				{
 					boolean isFull = false;//是否已投票满5次
 					int index = 1;//投票字段列索引
-					if(iptemp.getIpvote1() !=null && iptemp.getIpvote2() == null )
+					if(!ibsValidate.isEmpty(iptemp.getIpvote1()) && ibsValidate.isEmpty(iptemp.getIpvote2()) )
 					{
 						index = 2;
 					}
-					else if(iptemp.getIpvote2() != null && iptemp.getIpvote3() == null)
+					else if(!ibsValidate.isEmpty(iptemp.getIpvote2()) && ibsValidate.isEmpty(iptemp.getIpvote3()))
 					{
 						index = 3;
 					}
-					else if(iptemp.getIpvote3() != null && iptemp.getIpvote4() == null)
+					else if(!ibsValidate.isEmpty(iptemp.getIpvote3()) && ibsValidate.isEmpty(iptemp.getIpvote4()))
 					{
 						index = 4;
 					}
-					else if(iptemp.getIpvote4() != null && iptemp.getIpvote5() == null)
+					else if(!ibsValidate.isEmpty(iptemp.getIpvote4()) && ibsValidate.isEmpty(iptemp.getIpvote5()))
 					{
 						index = 5;
 					}
-					else if(iptemp.getIpvote5() != null)
+					else if(!ibsValidate.isEmpty(iptemp.getIpvote5()))
 					{
 						isFull = true;
 					}
@@ -407,4 +388,30 @@ public class merchantsAction<T> extends BaseAction{
 	}
 
 	
+	public void conrolPageData()
+	{
+		//进入投票页面，对商家列表进行查询分页等预处理
+				String PageURL = ServletActionContext.getRequest().getRequestURL().toString();//取得上一页或下一页链接的访问地址
+				String hql = " from Merchant order by votes desc";
+								
+				if(rowCount == 0)
+				{
+					rowCount = dao.list(hql).size();
+									
+					if(rowCount % pageSize > 0)
+					{
+						pageCount = rowCount/pageSize +1;
+					}
+					else
+					{
+						pageCount = rowCount/pageSize;
+					}
+
+				}
+						
+				List<Merchant> merchsList = (List<Merchant>)dao.list(hql,(pageNow-1)*pageSize,pageSize);
+				request.setAttribute("merchsList", merchsList);
+				request.setAttribute("PageURL", PageURL);
+
+	}
 }

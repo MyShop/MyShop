@@ -84,7 +84,7 @@ public class menuMgrAction<T> extends BaseAction {
 	{
 		
 		role = request.getParameter("role");
-		menuList = menuAction.searchMenu(0, role);
+		menuList = new menuAction().searchMenu(0, role);
 		PrintWriter out = response.getWriter();
 		JSONArray  jsonArray = JSONArray.fromObject(menuList);
 		response.setCharacterEncoding("UTF-8");

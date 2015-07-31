@@ -1,5 +1,6 @@
 package Hibernate;
 
+import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.cfg.Configuration;
@@ -24,6 +25,7 @@ public class HibernateSessionFactory {
     private  static Configuration configuration = new Configuration();    
     private static org.hibernate.SessionFactory sessionFactory;
     private static String configFile = CONFIG_FILE_LOCATION;
+    private static Logger logger = Logger.getLogger(HibernateSessionFactory.class);
 
 	static {
     	try {
@@ -52,11 +54,15 @@ public class HibernateSessionFactory {
 			if (sessionFactory == null) {
 				rebuildSessionFactory();
 			}
-			session = (sessionFactory != null) ? sessionFactory.openSession()
+			session = (sessionFactory != null  ) ? sessionFactory.openSession()
 					: null;
 			threadLocal.set(session);
 		}
-
+		if(session == null)
+		{
+			logger.error("Hibernate Session Factory get Session NULL!");
+		}
+		
         return session;
     }
 

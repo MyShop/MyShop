@@ -50,7 +50,7 @@ public class userOrderAction<T> extends BaseAction{
 	public String List() throws Exception {
 
 		try {
-			userInfo = (Userinfo)session.get("userInfo");
+			userInfo = (Userinfo)session.getAttribute("userInfo");
 			String userNo = userInfo.getId().toString();
 			String hql = "  from Order where userNo = '" + userNo + "'";
 			orderList = (List<Order>) dao.list(hql);

@@ -15,6 +15,15 @@ public class User {
 	
 	private Set<UserRole> roles;
 	
+	public User()
+	{
+		
+	}
+	
+	public User(int id,String userName,String password)
+	{
+		
+	}
 	public Userinfo getUserInfo() {
 		return userInfo;
 	}

@@ -21,44 +21,42 @@
 package com.ibs.action.login;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.logging.Logger;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
-import org.apache.struts2.ServletActionContext;
-import org.hibernate.Session;
-
-import Hibernate.HibernateSessionFactory;
 import base.BaseAction;
 import base.SystemVariable;
 import base.ibsValidate;
+import base.session.SessionManger;
 
+import com.ibs.action.online.AuthsOfSession;
+import com.ibs.hibernate.bean.online.IPLogin;
 import com.ibs.hibernate.bean.role.RoleType;
-import com.ibs.hibernate.bean.system.Menu;
 import com.ibs.hibernate.bean.user.User;
 import com.ibs.hibernate.bean.user.UserRole;
 import com.ibs.hibernate.bean.user.Userinfo;
 import com.ibs.hibernate.dao.BaseDAO;
-import com.opensymphony.xwork2.ActionContext;
 
 public class loginAction<T> extends BaseAction{
 
 	
+	
 	/**
-	 * 
+	 * 处理用户登录的Action
 	 */
 	private static final long serialVersionUID = -4645416777642978771L;
+	private static Logger logger = Logger.getLogger(AuthsOfSession.class.getName());
 	
 	private String email;
 	private String password;
 	private String rePassword;
 	private Userinfo userInfo;
-	
     private BaseDAO<T> dao;
 	
 	
@@ -106,7 +104,7 @@ public class loginAction<T> extends BaseAction{
 			{
 				this.addFieldError("rePassword", errorMessage.login104);
 			}
-			else if(!rePassword.equals(session.get("rePassword")))
+			else if(!rePassword.equals(session.getAttribute("rePassword")))
 			{
 				this.addFieldError("rePassword", errorMessage.login105);
 			}
@@ -159,10 +157,68 @@ public class loginAction<T> extends BaseAction{
 	 */
 	public String Enter() throws Exception
 	{
-			session.put("userInfo",userInfo);
-			userInfo = (Userinfo) session.get("userInfo");
-			String hql =" from UserRole where userAccount='" + email +"'";
-			List roles = dao.list(hql);
+			SessionManger.PutUserInfo(session, userInfo);
+			userInfo = (Userinfo) session.getAttribute("userInfo");
+			Integer key = userInfo.getId();
+			
+			/**
+			 * 检查该用户是否已在其他终端登录
+			 */
+			
+			 AuthsOfSession authSession = AuthsOfSession.getInstance();
+			 Hashtable sessionTables = 	authSession.getSessionTable();//获取session table
+			 HttpSession sessionTmp = (HttpSession)sessionTables.get(key);
+			 if(null != sessionTmp && !session.getId().equals(sessionTmp.getId()))
+			 {
+				 //注销之前的登录的session，提交新的session托管
+				 sessionTmp.invalidate();
+				 sessionTables.remove(key);
+				 logger.info(this.userInfo.getName()+"重复登录,本次中断上次登录!");
+				 sessionTables.put(key, this.session);
+			 }
+			 else
+			 {
+				 sessionTables.put(key,this.session);
+			 }
+			
+			 String ip = request.getRemoteAddr();
+			 //更新登陆记录表数据
+			IPLogin ipLogin = null;
+			
+			String ipLoginHQL = "  from IPLogin where userId=" + key;
+			List<IPLogin>  ipLogins = (ArrayList<IPLogin>)dao.list(ipLoginHQL);
+			if(null != ipLogins && ipLogins.size() == 0)
+				{
+					ipLogin = new IPLogin();
+					//设定好数据,插入数据
+					ipLogin.setUserId(key);
+					ipLogin.setisLogined(true);
+					ipLogin.setLastLoginDate(new Date(System.currentTimeMillis()));
+					ipLogin.setLastLoginIP(ip);
+					ipLogin.setLoginCount(1);
+					dao.create((T)ipLogin);
+				}
+				else
+				{
+					//设定好数据,准备更新
+					ipLogin = ipLogins.get(0);
+					ipLogin.setLastLoginDate(new Date(System.currentTimeMillis()));
+					ipLogin.setLastLoginIP(ip);
+					ipLogin.setLoginCount(ipLogin.getLoginCount()+1);
+					dao.update((T)ipLogin);
+				}
+			 
+			 //添加检验标志
+			 SessionManger.PutLoginFlag(this.session);
+			 
+			 //添加在线访问人数和历史访问人数
+			 session.setAttribute("activeOnline", authSession.getActiveOnline());
+			 session.setAttribute("historyOnline", authSession.getHistoryOnline());
+			/**
+			 * 检查用户的角色,从而导入到不同的页面
+			 */
+			String userAccountHQL =" from UserRole where userAccount='" + email +"'";
+			List roles = dao.list(userAccountHQL);
 			RoleType[] tempRoles =null;
 			Iterator it =null;
 			if(roles != null)
@@ -190,7 +246,52 @@ public class loginAction<T> extends BaseAction{
     
 	public String index() throws Exception
 	{
-		return this.Enter();
+		String checkFlag = SessionManger.GetLoginFlag(session);
+		Userinfo  userinfo = SessionManger.GetUserInfo(session);
+		
+		if(null == checkFlag && null == userinfo)
+		{
+			//检查是否是游客登录
+			String ip = request.getRemoteAddr();
+			
+			IPLogin ipLogin = null;
+			
+			String ipLoginHQL = "  from IPLogin where lastLoginIP='" + ip+"'";
+			
+			List<IPLogin> ipLogins = (List<IPLogin>)dao.list(ipLoginHQL);
+			if(null != ipLogins && ipLogins.size() == 0)
+			{
+				ipLogin = new IPLogin();
+				//设定好数据,插入数据
+				ipLogin.setisLogined(true);
+				ipLogin.setLastLoginDate(new Date(System.currentTimeMillis()));
+				ipLogin.setLastLoginIP(ip);
+				ipLogin.setLoginCount(1);
+				dao.create((T)ipLogin);
+				SessionManger.PutLoginFlag(session);
+			}
+			else
+			{
+				//设定好数据,准备更新
+				ipLogin = ipLogins.get(0);
+				ipLogin.setisLogined(true);
+				ipLogin.setLastLoginDate(new Date(System.currentTimeMillis()));
+				ipLogin.setLastLoginIP(ip);
+				ipLogin.setLoginCount(ipLogin.getLoginCount()+1);
+				dao.update((T)ipLogin);
+				SessionManger.PutLoginFlag(session);
+			}
+			
+		}
+		
+		if(session.getAttribute("activeOnline") == null  || session.getAttribute("historyOnline") == null)
+		{
+			AuthsOfSession  authSession = AuthsOfSession.getInstance();
+			session.setAttribute("activeOnline", authSession.getActiveOnline());
+			session.setAttribute("historyOnline", authSession.getHistoryOnline());
+		}
+		
+		return "success";
 	}
 	
 	public String execute()

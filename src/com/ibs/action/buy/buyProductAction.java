@@ -195,7 +195,7 @@ public class buyProductAction<T> extends BaseAction {
 		cartOfProd cart = new cartOfProd();// 构造一个购物车对象
 		cart.setCount(prodCount);// 给购物车赋值
 		cart.setProd(prod);// 给购物车赋值
-		List<cartOfProd> cartList = (List<cartOfProd>) session.get("cartList");
+		List<cartOfProd> cartList = (List<cartOfProd>) session.getAttribute("cartList");
 
 		boolean isContan = false;// 购物栏是否包含该产品
 		if (cartList != null) {
@@ -219,14 +219,14 @@ public class buyProductAction<T> extends BaseAction {
 				cartList.add(cart);
 			}
 
-			session.put("cartList", cartList);
+			session.putValue("cartList", cartList);
 		} else {
 
 			if ("true".equals(this.isBuy)) {
 				cartList = new ArrayList<cartOfProd>();
 				cartList.add(cart);
 				subTotal = prodCount * prod.getPrice();
-				session.put("cartList", cartList);
+				session.putValue("cartList", cartList);
 			}
 		}
 
@@ -239,7 +239,7 @@ public class buyProductAction<T> extends BaseAction {
 	public String addOneToCart() throws Exception {
 		String id = request.getParameter("id");
 		Integer prodId = Integer.parseInt(id);
-		List<cartOfProd> cartList = (List<cartOfProd>) session.get("cartList");
+		List<cartOfProd> cartList = (List<cartOfProd>) session.getAttribute("cartList");
 		StringBuffer json = new StringBuffer();
 		for (cartOfProd cartTemp : cartList) {
 			if (prodId.equals(cartTemp.getProd().getId())) {
@@ -257,7 +257,7 @@ public class buyProductAction<T> extends BaseAction {
 	public String delFromCart() throws Exception {
 		String id = request.getParameter("id");
 		Integer prodId = Integer.parseInt(id);
-		List<cartOfProd> cartList = (List<cartOfProd>) session.get("cartList");
+		List<cartOfProd> cartList = (List<cartOfProd>) session.getAttribute("cartList");
 		StringBuffer json = new StringBuffer();
 		for (cartOfProd cartTemp : cartList) {
 			if (prodId.equals(cartTemp.getProd().getId())) {
@@ -276,7 +276,7 @@ public class buyProductAction<T> extends BaseAction {
 		hql =" from Province";
 		List<Province> proList = (List<Province>)dao.list(hql);
 		
-		List<cartOfProd> cartList = (List<cartOfProd>)session.get("cartList");
+		List<cartOfProd> cartList = (List<cartOfProd>)session.getAttribute("cartList");
 		request.setAttribute("proList", proList);
 		request.setAttribute("cartList", cartList);
 		
@@ -402,7 +402,7 @@ public class buyProductAction<T> extends BaseAction {
 	public String commitMyCart()
 	{
 		// 预处理Order表中的信息
-				Userinfo userinfo = (Userinfo) session.get("userInfo");
+				Userinfo userinfo = (Userinfo) session.getAttribute("userInfo");
 				Integer userNo = userinfo.getId();
 				String phone = userinfo.getPhone();
 				// SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -422,7 +422,7 @@ public class buyProductAction<T> extends BaseAction {
 				order.setPhone(phone);
 
 				// 预处理Order表中的Product的信息
-				List<cartOfProd> cartList = (List<cartOfProd>) session.get("cartList");
+				List<cartOfProd> cartList = (List<cartOfProd>) session.getAttribute("cartList");
 
 				for (cartOfProd cartTemp : cartList) {
 					OrderProd orderProd = new OrderProd();

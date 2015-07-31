@@ -78,7 +78,7 @@ public class userInfoAction<T> extends BaseAction{
 	
 	public String execute()
 	{
-		Userinfo userInfo = (Userinfo) session.get("userInfo");
+		Userinfo userInfo = (Userinfo) session.getAttribute("userInfo");
 		
 		//判断该用户是填写过个人信息
 		if(userInfo != null)
@@ -322,7 +322,7 @@ public class userInfoAction<T> extends BaseAction{
 	{
 		try
 		{
-			Userinfo userinfo = (Userinfo) session.get("userInfo");
+			Userinfo userinfo = (Userinfo) session.getAttribute("userInfo");
 			userinfo.setName(name);
 			userinfo.setPhone(phone);
 			

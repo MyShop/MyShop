@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts2.interceptor.ServletRequestAware;
 import org.apache.struts2.interceptor.ServletResponseAware;
@@ -16,7 +17,7 @@ import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 
 public class BaseAction extends ActionSupport implements
-ServletRequestAware, ServletResponseAware, SessionAware {
+ServletRequestAware, ServletResponseAware{
 	
 	    /**
 	 * 
@@ -24,12 +25,8 @@ ServletRequestAware, ServletResponseAware, SessionAware {
 	private static final long serialVersionUID = 2648183755483368254L;
 		public HttpServletRequest request;
 	    public HttpServletResponse response;
-	    public Map session;
+	    public HttpSession session;
 	    private ActionContext action;
-	    @Override
-		public void setSession(Map<String, Object> session) {
-			this.session = session;
-		}
 
 		@Override
 		public void setServletResponse(HttpServletResponse response) {
@@ -39,6 +36,14 @@ ServletRequestAware, ServletResponseAware, SessionAware {
 		@Override
 		public void setServletRequest(HttpServletRequest request) {
 			this.request = request;
+			session = request.getSession(true);
+		}
+		public HttpSession getSession() {
+			return session;
+		}
+
+		public void setSession(HttpSession session) {
+			this.session = session;
 		}
 		public HashMap<Object,Object> rejectMap = new HashMap();
 		

@@ -9,13 +9,26 @@
 	 http://www.springframework.org/schema/aop http://www.springframework.org/schema/beans/spring-aop-3.0.xsd">
 
 	<bean id="dataSource"
-		class="org.apache.commons.dbcp.BasicDataSource"
+		class="com.mchange.v2.c3p0.ComboPooledDataSource"
 		destroy-method="close">
-		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
-		<property name="url"
+		<property name="driverClass" value="com.mysql.jdbc.Driver" />
+		<property name="jdbcUrl"
 			value="jdbc:mysql://localhost:3306/IBS?characterEncoding=UTF-8" />
-		<property name="username" value="root" />
-		<property name="password" value="root" />
+		<property name="user" value="root" />  
+        <property name="password" value="root" />  
+          
+         <property name="initialPoolSize" value="10" />  
+        <property name="minPoolSize" value="10" />  
+        <property name="maxPoolSize" value="100" />  
+        <property name="idleConnectionTestPeriod" value="1800" />  
+        <!--最大空闲时间,1800秒内未使用则连接被丢弃。若为0则永不丢弃。Default: 0 -->  
+        <property name="maxIdleTime" value="1800" />  
+        <property name="maxStatements" value="0" />  
+        <property name="maxStatementsPerConnection" value="0" />  
+        <property name="acquireIncrement" value="5" />  
+        <!--定义在从数据库获取新连接失败后重复尝试的次数。Default: 30 -->
+        <property name="acquireRetryAttempts" value="30" />  
+        <property name="acquireRetryDelay" value="180000" />   
 	</bean>
 
 	<bean id="sessionFactory"
@@ -38,6 +51,7 @@
 				<prop key="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</prop>
 				<prop key="hibernate.cache.use_query_cache">true</prop>
 				<prop key="hibernate.cache.use_second_level_cache">true</prop>
+				<prop key=""></prop>
 			</props>
 		</property>
 	</bean>
@@ -64,6 +78,7 @@
 	</bean>
 	
 	<bean id="menuAction" class="com.ibs.action.menu.menuAction" scope="prototype">
+		<property name="dao" ref="daoImpl"></property>
 	</bean>
 	
 	<bean id="showProductAction" class="com.ibs.action.product.showProductAction" scope="prototype">
